@@ -5,12 +5,15 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 
 class Game {
-  constructor(player1) {
-    this.player1Name = player1;
-    this.player2Name = null;
-    this.player1Move = null;
-    this.player2Move = null;
-    this.winner = null;
+  constructor(name) {
+    this.player1 = {
+      name: name,
+      move: null,
+    };
+    this.player2 = {
+      name: null,
+      move: null,
+    };
   }
 }
 
@@ -21,12 +24,31 @@ app.get("/api/games", (req, res) => {
 });
 
 app.post("/api/games/new", (req, res) => {
-  let name = req.body.name;
-  let game = new Game(name);
   let uuid = uuidv4();
-  games[uuid] = game;
-  console.log(`Player ${name} initialized a game with ID ${uuid}`);
+  games[uuid] = new Game(req.body.name);
+  console.log(`Player ${req.body.name} initialized game ${uuid}`);
   res.status(201).send(`Game ${uuid} successfully initialized`);
+});
+
+app.post("/api/games/:id/join", (req, res) => {
+  games[req.params.id].player2.name = req.body.name;
+  console.log(`Player ${req.body.name} joined game ${req.params.id}`);
+  res
+    .status(200)
+    .send(`Added player ${req.body.name} to game ${req.params.id}`);
+});
+
+app.post("/api/games/:id/move", (req, res) => {
+  let id = req.params.id;
+  let name = req.body.name;
+  let move = req.body.move;
+  let game = games[id];
+  if (name == game.player1.name) {
+    game.player1.move = move;
+  } else if (name == game.player2.name) {
+    game.player2.move = move;
+  }
+  res.sendStatus(200);
 });
 
 app.listen(PORT, () => {
