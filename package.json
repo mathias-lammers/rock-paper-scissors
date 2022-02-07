@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/mathias-lammers/rock-paper-scissors/issues"
   },
-  "homepage": "https://github.com/mathias-lammers/rock-paper-scissors#readme"
+  "homepage": "https://github.com/mathias-lammers/rock-paper-scissors#readme",
+  "dependencies": {
+    "express": "^4.17.2"
+  }
 }
