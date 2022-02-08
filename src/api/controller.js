@@ -1,10 +1,7 @@
-const Game = require("../services/game.js");
+const { Game, games } = require("../services/game.js");
 const Player = require("../services/player");
 const Move = require("../services/move");
 const { v4: uuidv4 } = require("uuid");
-
-// Holds all games with UUID as key and Game objects as value
-var games = {};
 
 module.exports = {
   getGames: async (req, res) => {
