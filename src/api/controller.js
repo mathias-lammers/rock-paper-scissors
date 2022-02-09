@@ -1,42 +1,46 @@
 const { Game, games } = require("../services/game.js");
 const Player = require("../services/player");
-const Move = require("../services/move");
+const { Move, results } = require("../services/move");
 const { v4: uuidv4 } = require("uuid");
 
 module.exports = {
   getGames: async (req, res) => {
     res.json(games);
   },
+  /**
+   * Return updated status and winner of the game with given ID
+   */
   getState: async (req, res) => {
     let id = req.params.id;
-    if (!isValidID(id)) {
-      return res.status(404).json({
-        message: `Error: Invalid game ID`,
-      });
-    }
-    res.status(200).json(games[id].state);
-  },
-  updateState: async (req, res) => {
-    let id = req.params.id;
-    if (!isValidID(id)) {
-      return res.status(404).json({
-        message: `Error: Invalid game ID`,
-      });
-    }
-    if (games[id].players.some((player) => player.move == null)) {
-      games[id].state = "PENDING";
+
+    // Check if valid input ID
+    if (!isValidID(id)) return res.status(404).json(invalidIdMsg);
+
+    // Update state
+    if (
+      games[id].players.some((player) => player.move == null) ||
+      games[id].players.length < 2
+    ) {
+      games[id].status = "PENDING";
     } else {
-      // TODO Check that two players have played
-      games[id].state = "FINISHED";
+      games[id].status = "FINISHED";
       let winnerIndex = getWinnerIndex(games[id].players);
-      if (winnerIndex == -1) {
-        games[id].winner = "TIE";
-      } else {
-        games[id].winner = games[id].players[winnerIndex].name;
-      }
+      games[id].winner =
+        winnerIndex == -1
+          ? (games[id].winner = "TIE")
+          : games[id].players[winnerIndex].name;
     }
-    res.sendStatus(200);
+
+    // Return state
+    res.status(200).json({
+      status: games[id].status,
+      winner: games[id].winner,
+    });
   },
+
+  /**
+   * Create a new game with generated UUID as key and push to games object
+   */
   newGame: async (req, res) => {
     let uuid = uuidv4();
     games[uuid] = new Game(req.body.name);
@@ -45,21 +49,25 @@ module.exports = {
       message: `Game ${uuid} successfully initialized by ${req.body.name}`,
     });
   },
+
+  /**
+   * Add a player with given name to a game with given ID
+   */
   joinGame: async (req, res) => {
     let id = req.params.id;
     let name = req.body.name;
-    if (!isValidID(id)) {
-      return res.status(404).json({
-        message: `Error: Invalid game ID`,
-      });
-    }
+
+    // Check if valid input ID
+    if (!isValidID(id)) return res.status(404).json(invalidIdMsg);
+
+    // Add player if eligible
     if (games[id].players.length >= 2) {
       res.status(409).json({
-        message: `Unable to join, game ${id} already has two players`,
+        message: `Error: unable to join, game ${id} already has two players`,
       });
     } else if (games[id].players.some((player) => player.name == name)) {
       res.status(409).json({
-        message: `Unable to join, there is already a player named ${name}`,
+        message: `Error: unable to join, there is already a player named ${name}`,
       });
     } else {
       games[id].players.push(new Player(name));
@@ -68,46 +76,68 @@ module.exports = {
       });
     }
   },
+
+  /**
+   * Update the move of a player in game with given ID
+   */
   makeMove: async (req, res) => {
     let move = req.body.move.toUpperCase();
     let id = req.params.id;
     let name = req.body.name;
-    if (!isValidID(id) || !isValidMove(move)) {
+    let isValidMove = Move.includes(move);
+    let isValidID = id in games;
+
+    // Check that input ID and move is valid
+    if (!isValidID || !isValidMove) {
+      let message = "Error: ";
+      message = !isValidID ? message + "invalid game ID" : message;
+      message = !isValidID && !isValidMove ? message + " and " : message;
+      message = !isValidMove ? message + "invalid move" : message;
       return res.status(404).json({
-        validID: isValidID, // TODO Check why these does not show
-        validMove: isValidMove,
-        message: `Error: Either invalid game ID or move`,
+        message: message,
       });
     }
+
+    // Make move if eligible
     let index = games[id].players.findIndex((player) => player.name == name);
     if (index == -1) {
       res.status(404).json({
-        message: `Error: No player by the name ${name} found in game ${id}`,
+        message: `Error: no player by the name ${name} found in game ${id}`,
+      });
+    } else if (games[id].players[index].move != null) {
+      res.status(409).json({
+        message: `Error: player ${name} has already made their move`,
       });
     } else {
       games[id].players[index].move = move;
       res.status(200).json({
-        message: `Player ${name} played ${move}`,
+        message: `Player ${name} made their move`,
       });
     }
   },
 };
 
+const invalidIdMsg = {
+  message: `Error: invalid game ID`,
+};
+
+/**
+ * Check for existence of game with input ID
+ * @param {string} id   ID to check
+ * @returns             Boolean
+ */
 function isValidID(id) {
   return id in games;
 }
 
-function isValidMove(move) {
-  return Move.includes(move);
-}
-
+/**
+ * Return the index of the winning player, or -1 if the game ended in a
+ * tie, by comparing the index of their moves to the results matrix
+ * @param {[Player]} players   Players to compare
+ * @returns                    Index in case of winning player, else -1
+ */
 function getWinnerIndex(players) {
   let moveIndex1 = Move.indexOf(players[0].move);
   let moveIndex2 = Move.indexOf(players[1].move);
-  let results = [
-    [-1, 1, 0],
-    [0, -1, 1],
-    [1, 0, -1],
-  ];
   return results[moveIndex1][moveIndex2];
 }

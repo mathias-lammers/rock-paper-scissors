@@ -18,6 +18,5 @@ router.get("/games/:id", getState);
 router.post("/games/new", newGame);
 router.post("/games/:id/join", joinGame);
 router.post("/games/:id/move", makeMove);
-router.post("/games/:id/update", updateState);
 
 module.exports = router;

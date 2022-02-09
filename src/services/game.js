@@ -3,7 +3,7 @@ const Player = require("./player");
 class Game {
   constructor(name) {
     this.players = [new Player(name)];
-    this.state = "INITIALIZED";
+    this.status = "INITIALIZED";
     this.winner = null;
   }
 }
