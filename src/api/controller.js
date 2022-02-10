@@ -1,6 +1,6 @@
-const { Game, games } = require("../services/game.js");
-const Player = require("../services/player");
-const { Move, results } = require("../services/move");
+const { Game, games } = require("../model/game.js");
+const Player = require("../model/player");
+const { Move, results } = require("../model/move");
 const { v4: uuidv4 } = require("uuid");
 
 module.exports = {
