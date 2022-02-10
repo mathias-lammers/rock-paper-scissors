@@ -86,19 +86,15 @@ module.exports = {
     let move = req.body.move.toUpperCase();
     let id = req.params.id;
     let name = req.body.name;
-    let isValidMove = Move.includes(move);
-    let isValidID = id in games;
 
-    // Check that input ID and move is valid
-    if (!isValidID || !isValidMove) {
-      let message = "Error: ";
-      message = !isValidID ? message + "invalid game ID" : message;
-      message = !isValidID && !isValidMove ? message + " and " : message;
-      message = !isValidMove ? message + "invalid move" : message;
+    // Check if valid input ID
+    if (!isValidID(id)) return res.status(404).json(invalidIdMsg);
+
+    // Check if valid input move
+    if (!Move.includes(move))
       return res.status(404).json({
-        message: message,
+        message: "Error: invalid move",
       });
-    }
 
     // Make move if eligible
     let index = games[id].players.findIndex((player) => player.name == name);
