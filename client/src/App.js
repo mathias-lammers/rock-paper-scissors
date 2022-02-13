@@ -1,7 +1,9 @@
+import CreateGame from "./components/CreateGame";
+
 function App() {
   return (
     <div className="App">
-      <h1>Hello World!</h1>
+      <CreateGame />
     </div>
   );
 }
