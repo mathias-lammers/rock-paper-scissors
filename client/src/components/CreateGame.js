@@ -17,22 +17,34 @@ export default class CreateGame extends React.Component {
     this.setState({ [e.target.name]: e.target.value });
   }
 
-  handleSubmit(e) {
-    axios
+  async handleSubmit(e) {
+    await axios
       .post("http://localhost:3000/api/games/new", {
-        name: this.state.move,
+        name: this.state.name,
       })
       .then((res) => {
-        this.setState({ id: res.data.id, showAlert: true });
+        this.setState({ id: res.data.id });
       })
       .catch((error) => {
         console.log(error);
       });
-    this.setState({
-      name: "",
-      move: "",
-      id: "",
-    });
+
+    await axios
+      .post(`http://localhost:3000/api/games/${this.state.id}/move`, {
+        name: this.state.name,
+        move: this.state.move,
+      })
+      .then((res) => {
+        this.setState({ showAlert: true });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
+    // this.setState({
+    //   name: "",
+    //   move: "",
+    // });
   }
 
   render() {

@@ -110,3 +110,5 @@ If successful, the response provide a confirmation:
 - Properly define the possible statuses
 - Make separate classes of each move?
 - Let players have same name
+- Reset forms after submitting
+- Add alerts for incorrect inputs in GUI
