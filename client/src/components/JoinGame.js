@@ -4,7 +4,7 @@ import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 
-export default class CreateGame extends React.Component {
+export default class JoinGame extends React.Component {
   constructor(props) {
     super(props);
     this.state = { id: "", name: "" };
@@ -40,6 +40,7 @@ export default class CreateGame extends React.Component {
     return (
       <Container>
         <h2>Join a game</h2>
+        <p>Fill in the form and press "Join" to join a game</p>
 
         <Form.Group className="mb-3" controlId="formJoinGameId">
           <Form.Label>Game ID</Form.Label>
