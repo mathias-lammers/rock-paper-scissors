@@ -3,11 +3,12 @@ import axios from "axios";
 import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
+import Alert from "react-bootstrap/Alert";
 
 export default class GetGameState extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { id: "" };
+    this.state = { id: "", showAlert: false, status: "", winner: "" };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -17,17 +18,22 @@ export default class GetGameState extends React.Component {
   }
 
   handleSubmit(e) {
-    let url = `http://localhost:3000/api/games/${this.state.id}`;
     axios
-      .get(url)
+      .get(`http://localhost:3000/api/games/${this.state.id}`)
       .then((res) => {
-        alert(`Winner: ${res.data.winner}, state: ${res.data.status}`);
+        this.setState({
+          showAlert: true,
+          status: res.data.status,
+          winner: res.data.winner,
+        });
       })
       .catch((error) => {
         console.log(error);
       });
     this.setState({
       id: "",
+      status: "",
+      winner: "",
     });
   }
 
@@ -46,9 +52,25 @@ export default class GetGameState extends React.Component {
           />
         </Form.Group>
 
-        <Button variant="primary" type="submit" onClick={this.handleSubmit}>
+        <Button
+          className="mb-3"
+          variant="primary"
+          type="submit"
+          onClick={this.handleSubmit}
+        >
           Get
         </Button>
+
+        <Alert variant="secondary" show={this.state.showAlert} style={{ width: "42rem" }}>
+          <Alert.Heading>Game status</Alert.Heading>
+          <p>The current status is:</p>
+          <p>
+            <strong>Status: </strong> {this.state.status}
+          </p>
+          <p>
+            <strong>Winner: </strong> {this.state.winner}
+          </p>
+        </Alert>
       </Container>
     );
   }

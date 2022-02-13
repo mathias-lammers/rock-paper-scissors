@@ -23,13 +23,14 @@ module.exports = {
       games[id].players.some((player) => player.move == null) ||
       games[id].players.length < 2
     ) {
-      games[id].status = "PENDING";
+      games[id].status = "Pending";
+      games[id].winner = "To be determined";
     } else {
-      games[id].status = "FINISHED";
+      games[id].status = "Finished";
       let winnerIndex = getWinnerIndex(games[id].players);
       games[id].winner =
         winnerIndex == -1
-          ? (games[id].winner = "TIE")
+          ? (games[id].winner = "Tie")
           : games[id].players[winnerIndex].name;
     }
 
