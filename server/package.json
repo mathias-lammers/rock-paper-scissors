@@ -4,7 +4,8 @@
   "description": "A node.js RESTful API that let's a player challenge another in a game of Rock, paper, scissors.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server/index.js"
   },
   "repository": {
     "type": "git",
