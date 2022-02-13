@@ -37,65 +37,33 @@ export default class NavbarComponent extends React.Component {
 
   render() {
     return (
-      <div>
-        <div>
-          <Navbar bg="light" expand="lg">
-            <Container>
-              <Navbar.Brand>Rock paper scissors</Navbar.Brand>
-              <Navbar.Toggle aria-controls="basic-navbar-nav" />
-              <Navbar.Collapse id="basic-navbar-nav">
-                <Nav className="me-auto">
-                  <Nav.Link as={Link} to={"/"}>
-                    New game
-                  </Nav.Link>
-                  <Nav.Link as={Link} to={"/join"}>
-                    Join game
-                  </Nav.Link>
-                  <Nav.Link as={Link} to={"/check"}>
-                    Check game
-                  </Nav.Link>
-                </Nav>
-              </Navbar.Collapse>
-            </Container>
-          </Navbar>
-        </div>
-        <div>
-          <Routes>
-            <Route path="/" element={<CreateGame />} />
-            <Route path="/join" element={<JoinGame />} />
-            <Route path="/check" element={<GetGameState />} />
-          </Routes>
-        </div>
-      </div>
+      <Container>
+        <Navbar bg="light" expand="lg">
+          <Container>
+            <Navbar.Brand>Rock paper scissors</Navbar.Brand>
+            <Navbar.Toggle aria-controls="basic-navbar-nav" />
+            <Navbar.Collapse id="basic-navbar-nav">
+              <Nav className="me-auto">
+                <Nav.Link as={Link} to={"/"}>
+                  New game
+                </Nav.Link>
+                <Nav.Link as={Link} to={"/join"}>
+                  Join game
+                </Nav.Link>
+                <Nav.Link as={Link} to={"/check"}>
+                  Check game
+                </Nav.Link>
+              </Nav>
+            </Navbar.Collapse>
+          </Container>
+        </Navbar>
 
-      // <div>
-      //   <div>
-      //     <Navbar>
-      //       <Navbar.Brand as={Link} to="/">
-      //         React-Bootstrap
-      //       </Navbar.Brand>
-      //       <Navbar.Collapse>
-      //         <Nav className="me-auto">
-      //           <Nav.Item eventkey={1} href="/">
-      //             <Nav.Link as={Link} to="/">
-      //               Home
-      //             </Nav.Link>
-      //           </Nav.Item>
-      //         </Nav>
-      //       </Navbar.Collapse>
-      //     </Navbar>
-      //   </div>
-      //   <div>
-      //     <Routes>
-      //       <Route exact path="/" component={CreateGame} />
-      //       <Route
-      //         render={function () {
-      //           return <p>Not found</p>;
-      //         }}
-      //       />
-      //     </Routes>
-      //   </div>
-      // </div>
+        <Routes>
+          <Route path="/" element={<CreateGame />} />
+          <Route path="/join" element={<JoinGame />} />
+          <Route path="/check" element={<GetGameState />} />
+        </Routes>
+      </Container>
     );
   }
 }

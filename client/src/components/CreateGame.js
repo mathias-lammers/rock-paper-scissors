@@ -3,11 +3,12 @@ import axios from "axios";
 import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
+import Alert from "react-bootstrap/Alert";
 
 export default class CreateGame extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { name: "", move: "rock" };
+    this.state = { name: "", move: "rock", showAlert: false };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -22,7 +23,7 @@ export default class CreateGame extends React.Component {
         name: this.state.move,
       })
       .then((res) => {
-        alert(res.data.message);
+        this.setState({ id: res.data.id, showAlert: true });
       })
       .catch((error) => {
         console.log(error);
@@ -30,6 +31,7 @@ export default class CreateGame extends React.Component {
     this.setState({
       name: "",
       move: "",
+      id: "",
     });
   }
 
@@ -52,18 +54,37 @@ export default class CreateGame extends React.Component {
           </Form.Text>
         </Form.Group>
 
-        <Form.Group controlId="formBasicSelect">
+        <Form.Group controlId="formNewGameMove">
           <Form.Label>Move</Form.Label>
-          <Form.Control as="select" name="move" onChange={this.handleChange}>
+          <Form.Control
+            className="mb-3"
+            as="select"
+            name="move"
+            onChange={this.handleChange}
+          >
             <option value="rock">Rock</option>
             <option value="paper">Paper</option>
             <option value="scissors">Scissors</option>
           </Form.Control>
         </Form.Group>
 
-        <Button variant="primary" type="submit" onClick={this.handleSubmit}>
+        <Button
+          className="mb-3"
+          variant="primary"
+          type="submit"
+          onClick={this.handleSubmit}
+        >
           Create
         </Button>
+
+        <Alert variant="success" show={this.state.showAlert} style={{ width: "42rem" }}>
+          <Alert.Heading>Success</Alert.Heading>
+          <p>Game was successfully initialized with the following ID:</p>
+          <p>
+            <strong>{this.state.id}</strong>
+          </p>
+          <p>Share it to challenge a friend (or enemy)</p>
+        </Alert>
       </Container>
     );
   }
