@@ -8,23 +8,17 @@ export default class JoinGame extends React.Component {
   constructor(props) {
     super(props);
     this.state = { id: "", name: "" };
-    this.handleNameChange = this.handleNameChange.bind(this);
-    this.handleIdChange = this.handleIdChange.bind(this);
+    this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleNameChange(e) {
-    this.setState({ name: e.target.value });
-  }
-
-  handleIdChange(e) {
-    this.setState({ id: e.target.value });
+  handleChange(e) {
+    this.setState({ [e.target.name]: e.target.value });
   }
 
   handleSubmit(e) {
-    let url = `http://localhost:3000/api/games/${this.state.id}/join`;
     axios
-      .post(url, {
+      .post(`http://localhost:3000/api/games/${this.state.id}/join`, {
         name: this.state.name,
       })
       .then((res) => {
@@ -46,8 +40,9 @@ export default class JoinGame extends React.Component {
           <Form.Label>Game ID</Form.Label>
           <Form.Control
             type="text"
+            name="id"
             placeholder="Enter game ID..."
-            onChange={this.handleIdChange}
+            onChange={this.handleChange}
           />
         </Form.Group>
 
@@ -55,8 +50,9 @@ export default class JoinGame extends React.Component {
           <Form.Label>Player name</Form.Label>
           <Form.Control
             type="text"
+            name="name"
             placeholder="Enter player name..."
-            onChange={this.handleNameChange}
+            onChange={this.handleChange}
           />
           <Form.Text className="text-muted">
             Note: two players can't share name in a game.

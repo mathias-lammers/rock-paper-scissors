@@ -7,20 +7,19 @@ import Button from "react-bootstrap/Button";
 export default class CreateGame extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { name: "" };
+    this.state = { name: "", move: "rock" };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   handleChange(e) {
-    this.setState({ name: e.target.value });
+    this.setState({ [e.target.name]: e.target.value });
   }
 
   handleSubmit(e) {
-    let url = "http://localhost:3000/api/games/new";
     axios
-      .post(url, {
-        name: this.state.name,
+      .post("http://localhost:3000/api/games/new", {
+        name: this.state.move,
       })
       .then((res) => {
         alert(res.data.message);
@@ -30,6 +29,7 @@ export default class CreateGame extends React.Component {
       });
     this.setState({
       name: "",
+      move: "",
     });
   }
 
@@ -43,12 +43,22 @@ export default class CreateGame extends React.Component {
           <Form.Label>Player name</Form.Label>
           <Form.Control
             type="text"
+            name="name"
             placeholder="Enter player name..."
             onChange={this.handleChange}
           />
           <Form.Text className="text-muted">
             Note: two players can't share name in a game.
           </Form.Text>
+        </Form.Group>
+
+        <Form.Group controlId="formBasicSelect">
+          <Form.Label>Move</Form.Label>
+          <Form.Control as="select" name="move" onChange={this.handleChange}>
+            <option value="rock">Rock</option>
+            <option value="paper">Paper</option>
+            <option value="scissors">Scissors</option>
+          </Form.Control>
         </Form.Group>
 
         <Button variant="primary" type="submit" onClick={this.handleSubmit}>
