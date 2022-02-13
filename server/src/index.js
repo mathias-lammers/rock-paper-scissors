@@ -1,6 +1,6 @@
 const app = require("./app");
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 
 app
   .listen(PORT, () => {
@@ -9,3 +9,7 @@ app
   .on("error", (e) => {
     console.log("Error: ", e.message);
   });
+
+app.get("/api", (req, res) => {
+  res.json({ message: "Hello from server!" });
+});
