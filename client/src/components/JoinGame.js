@@ -7,17 +7,22 @@ import Button from "react-bootstrap/Button";
 export default class CreateGame extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { name: "" };
-    this.handleChange = this.handleChange.bind(this);
+    this.state = { id: "", name: "" };
+    this.handleNameChange = this.handleNameChange.bind(this);
+    this.handleIdChange = this.handleIdChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleChange(e) {
+  handleNameChange(e) {
     this.setState({ name: e.target.value });
   }
 
+  handleIdChange(e) {
+    this.setState({ id: e.target.value });
+  }
+
   handleSubmit(e) {
-    let url = "http://localhost:3000/api/games/new";
+    let url = `http://localhost:3000/api/games/${this.state.id}/join`;
     axios
       .post(url, {
         name: this.state.name,
@@ -26,24 +31,31 @@ export default class CreateGame extends React.Component {
         alert(res.data.message);
       })
       .catch((error) => {
-        console.log(error);
+        alert(error);
       });
-    this.setState({
-      name: "",
-    });
+    this.setState({ id: "", name: "" });
   }
 
   render() {
     return (
       <Container>
-        <h2>Create a new game</h2>
+        <h2>Join a game</h2>
 
-        <Form.Group className="mb-3" controlId="formNewGameName">
-          <Form.Label>Enter your name to create a new game</Form.Label>
+        <Form.Group className="mb-3" controlId="formJoinGameId">
+          <Form.Label>Game ID</Form.Label>
           <Form.Control
             type="text"
-            placeholder="Player name"
-            onChange={this.handleChange}
+            placeholder="Enter game ID..."
+            onChange={this.handleIdChange}
+          />
+        </Form.Group>
+
+        <Form.Group className="mb-3" controlId="formJoinGameName">
+          <Form.Label>Player name</Form.Label>
+          <Form.Control
+            type="text"
+            placeholder="Enter player name..."
+            onChange={this.handleNameChange}
           />
           <Form.Text className="text-muted">
             Note: two players can't share name in a game.
@@ -51,7 +63,7 @@ export default class CreateGame extends React.Component {
         </Form.Group>
 
         <Button variant="primary" type="submit" onClick={this.handleSubmit}>
-          Create
+          Join
         </Button>
       </Container>
     );

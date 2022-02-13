@@ -109,3 +109,4 @@ If successful, the response provide a confirmation:
 - Add player moves to finished `GET /api/games/:id` endpoint
 - Properly define the possible statuses
 - Make separate classes of each move?
+- Let players have same name
