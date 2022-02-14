@@ -4,11 +4,6 @@ const { Move, results } = require("../model/move");
 const { v4: uuidv4 } = require("uuid");
 
 module.exports = {
-  // Only for testing, delete when done
-  getGames: async (req, res) => {
-    res.json(games);
-  },
-
   /**
    * Return updated status and winner of the game with given ID
    */
