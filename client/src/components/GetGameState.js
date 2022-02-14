@@ -62,7 +62,6 @@ export default class GetGameState extends React.Component {
         </Button>
 
         <Alert variant="secondary" show={this.state.showAlert} style={{ width: "42rem" }}>
-          <Alert.Heading>Game status</Alert.Heading>
           <p>The current status is:</p>
           <p>
             <strong>Status: </strong> {this.state.status}
