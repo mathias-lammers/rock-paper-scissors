@@ -1,17 +1,9 @@
 const { Router } = require("express");
-const {
-  getGames,
-  getState,
-  updateState,
-  newGame,
-  joinGame,
-  makeMove,
-} = require("./controller");
+const { getState, newGame, joinGame, makeMove } = require("./controller");
 
 const router = Router();
 
 // GET route
-router.get("/games", getGames); // For testing
 router.get("/games/:id", getState);
 
 // POST routes

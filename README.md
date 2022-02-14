@@ -4,9 +4,15 @@ A node.js RESTful API that let's a player challenge another in a game of Rock, p
 
 ## Install
 
-Clone project to directory of your choice and install necessary dependencies:
+Clone project to directory of your choice and install necessary dependencies in both `client` and `server` folder:
 
 ```
+$ cd client/
+$ npm install
+```
+
+```
+$ cd server/
 $ npm install
 ```
 
@@ -15,7 +21,7 @@ $ npm install
 Start the server by executing the following from the root directory:
 
 ```
-$ node src/
+$ npm start
 ```
 
 The server will now be listening at `http://localhost:3000/`.
