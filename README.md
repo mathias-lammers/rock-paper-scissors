@@ -18,26 +18,34 @@ $ npm install
 
 ## Run
 
-Start the server by executing the following from the root directory:
+Start the server by executing the following from the `server/` directory:
 
 ```
 $ npm start
 ```
 
-The server will now be listening at `http://localhost:3000/`.
+The server will now be listening at `http://localhost:3001/`.
+
+Likewise, start the client by executing the following from the `client/` directory:
+
+```
+$ npm start
+```
+
+The client should open automatically in your browser, but if not, it is available at `http://localhost:3000/`.
 
 ## Use
 
-Either use the app through the GUI (not yet implemented) or manually send requests, for example with the help of Postman, to the endpoints of the API. In the following sections, the variable `id` refers to a generated
+Either use the app through the GUI (work in progress) or manually send requests, for example with the help of Postman, to the endpoints of the API. In the following sections, the variable `id` refers to a generated
 [uuidv4](https://www.npmjs.com/package/uuid).
 
 ### `GET /api/games/:id`
 
-Updates and returns the state of a game:
+Updates and returns the state of a game. Checks that a valid game ID has been included in the request parameters. If successful, the following is included in the response body:
 
 ```json
 {
-  "status": "PENDING",
+  "status": "Pending",
   "winner": null
 }
 ```
@@ -46,7 +54,7 @@ If both players have made their moves, the winner is announced as well:
 
 ```json
 {
-  "status": "FINISHED",
+  "status": "Finished",
   "winner": "Player2"
 }
 ```
@@ -61,7 +69,7 @@ Creates a new game. Include the player's name in the request body:
 }
 ```
 
-The response from the server include the generated `id` for that game:
+A successful response from the server include the generated `id` for that game:
 
 ```json
 {
@@ -111,10 +119,7 @@ If successful, the response provide a confirmation:
 
 - Confirm that request body and parameters contain expected data
 - Add unit tests
-- Implement a GUI
 - Add player moves to finished `GET /api/games/:id` endpoint
-- Properly define the possible statuses
 - Make separate classes of each move?
 - Let players have same name
 - Reset forms after submitting
-- Add alerts for incorrect inputs in GUI
