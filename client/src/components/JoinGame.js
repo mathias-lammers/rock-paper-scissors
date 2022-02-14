@@ -22,23 +22,22 @@ export default class JoinGame extends React.Component {
       .post(`http://localhost:3000/api/games/${this.state.id}/join`, {
         name: this.state.name,
       })
-      .catch((error) => {
-        console.log(error);
-      });
-
-    await axios
-      .post(`http://localhost:3000/api/games/${this.state.id}/move`, {
-        name: this.state.name,
-        move: this.state.move,
-      })
       .then((res) => {
-        this.setState({ showAlert: true });
+        axios
+          .post(`http://localhost:3000/api/games/${this.state.id}/move`, {
+            name: this.state.name,
+            move: this.state.move,
+          })
+          .then((res) => {
+            this.setState({ showAlert: true });
+          })
+          .catch((error) => {
+            alert(error.response.data.message);
+          });
       })
       .catch((error) => {
-        console.log(error);
+        alert(error.response.data.message);
       });
-
-    // this.setState({ id: "", name: "" });
   }
 
   render() {
@@ -84,7 +83,12 @@ export default class JoinGame extends React.Component {
           </Form.Control>
         </Form.Group>
 
-        <Button variant="primary" type="submit" onClick={this.handleSubmit}>
+        <Button
+          className="mb-3"
+          variant="primary"
+          type="submit"
+          onClick={this.handleSubmit}
+        >
           Join
         </Button>
 

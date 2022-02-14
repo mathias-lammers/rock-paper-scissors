@@ -28,7 +28,7 @@ export default class GetGameState extends React.Component {
         });
       })
       .catch((error) => {
-        console.log(error);
+        alert(error.response.data.message);
       });
     this.setState({
       id: "",
@@ -40,8 +40,8 @@ export default class GetGameState extends React.Component {
   render() {
     return (
       <Container>
-        <h2>Get state of game</h2>
-        <p>Fill in the form and press "Get" to get the current state of a game</p>
+        <h2>Check who won</h2>
+        <p>Fill in the form and press "Get" to get the current status of a game</p>
 
         <Form.Group className="mb-3" controlId="formGetGameStateID">
           <Form.Label>Game ID</Form.Label>

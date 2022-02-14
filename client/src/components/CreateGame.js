@@ -24,27 +24,21 @@ export default class CreateGame extends React.Component {
       })
       .then((res) => {
         this.setState({ id: res.data.id });
+        axios
+          .post(`http://localhost:3000/api/games/${res.data.id}/move`, {
+            name: this.state.name,
+            move: this.state.move,
+          })
+          .then((res) => {
+            this.setState({ showAlert: true });
+          })
+          .catch((error) => {
+            alert(error.response.data.message);
+          });
       })
       .catch((error) => {
-        console.log(error);
+        alert(error.response.data.message);
       });
-
-    await axios
-      .post(`http://localhost:3000/api/games/${this.state.id}/move`, {
-        name: this.state.name,
-        move: this.state.move,
-      })
-      .then((res) => {
-        this.setState({ showAlert: true });
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-
-    // this.setState({
-    //   name: "",
-    //   move: "",
-    // });
   }
 
   render() {

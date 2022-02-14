@@ -16,7 +16,7 @@ module.exports = {
     let id = req.params.id;
 
     // Check if valid input ID
-    if (!isValidID(id)) return res.status(404).json(invalidIdMsg);
+    if (!isValidID(id) || !id) return res.status(404).json(invalidIdMsg);
 
     // Update state
     if (
@@ -45,12 +45,19 @@ module.exports = {
    * Create a new game with generated UUID as key and push to games object
    */
   newGame: async (req, res) => {
-    let uuid = uuidv4();
-    games[uuid] = new Game(req.body.name);
-    res.status(201).json({
-      id: uuid,
-      message: `Game ${uuid} successfully initialized by ${req.body.name}`,
-    });
+    let name = req.body.name;
+    if (!name) {
+      res.status(409).json({
+        message: `Error: unable to create new game, no name provided`,
+      });
+    } else {
+      let uuid = uuidv4();
+      games[uuid] = new Game(name);
+      res.status(201).json({
+        id: uuid,
+        message: `Game ${uuid} successfully initialized by ${name}`,
+      });
+    }
   },
 
   /**
@@ -61,7 +68,7 @@ module.exports = {
     let name = req.body.name;
 
     // Check if valid input ID
-    if (!isValidID(id)) return res.status(404).json(invalidIdMsg);
+    if (!isValidID(id) || !id) return res.status(400).json(invalidIdMsg);
 
     // Add player if eligible
     if (games[id].players.length >= 2) {
@@ -89,18 +96,18 @@ module.exports = {
     let name = req.body.name;
 
     // Check if valid input ID
-    if (!isValidID(id)) return res.status(404).json(invalidIdMsg);
+    if (!isValidID(id) || !id) return res.status(400).json(invalidIdMsg);
 
     // Check if valid input move
     if (!Move.includes(move))
-      return res.status(404).json({
+      return res.status(400).json({
         message: "Error: invalid move",
       });
 
     // Make move if eligible
     let index = games[id].players.findIndex((player) => player.name == name);
     if (index == -1) {
-      res.status(404).json({
+      res.status(400).json({
         message: `Error: no player by the name ${name} found in game ${id}`,
       });
     } else if (games[id].players[index].move != null) {
